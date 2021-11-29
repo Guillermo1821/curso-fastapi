@@ -66,7 +66,7 @@ class Person(BaseModel):
     
     class Config:
         shcema_extra = {
-            "Guillermo":{
+            "example":{
                 "first_name": "guillermo",
                 "last_name": "Chacon",
                 "age": 24,
@@ -95,12 +95,14 @@ def show_person(
         min_length=1, 
         max_length=50,
         title="Person name",
-        description="This is the person name, its between 1 and 50 characters"
+        description="This is the person name, its between 1 and 50 characters",
+        example="Rocio"
         ),
     age: str = Query(
         ...,
         title="Person age",
-        description="This is the person age, its required"
+        description="This is the person age, its required",
+        example=22
         )
     
 ):
@@ -115,7 +117,8 @@ def show_person(
         ..., 
         gt=0,
         title="This is the person ID",
-        description="This is the person ID, Its required"
+        description="This is the person ID, Its required",
+        example=123
         )
 ):
     return {person_id: "It exists!"}
@@ -129,7 +132,8 @@ def update_person(
         ...,
         title="Person ID",
         description="This is the person ID",
-        gt=0
+        gt=0,
+        example=123
     ),
     person: Person = Body(...),
     Location: Location = Body(...)
