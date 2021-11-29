@@ -5,11 +5,12 @@ from enum import Enum
 
 #Pydantic
 from pydantic import BaseModel
-from pydantic import Field
+from pydantic import Field, EmailStr
 
 #FastaPi
 from fastapi import FastAPI
 from fastapi import Body, Query, Path
+from pydantic.networks import EmailStr
 
 
 app = FastAPI()
@@ -25,9 +26,20 @@ class HairColor(Enum):
 
 
 class Location(BaseModel):
-    city: str
-    state: str
-    country: str
+    city: str = Field(
+        ...,
+        min_length=1,
+        max_length=30
+        )
+    state: str = Field(
+        min_length=1,
+        max_length=30
+    )
+    country: str = Field(
+        ...,
+        min_length=1,
+        max_length=30
+    )
 
 
 class Person(BaseModel):
@@ -47,6 +59,21 @@ class Person(BaseModel):
         )
     hair_color: Optional[HairColor] = Field(default=None)
     is_married: Optional[bool] = Field(default=None)
+    email: EmailStr = Field(
+        ...,
+        title="Email user",
+        description="This is the email user")
+    
+    class Config:
+        shcema_extra = {
+            "Guillermo":{
+                "first_name": "guillermo",
+                "last_name": "Chacon",
+                "age": 24,
+                "hair_color": "black",
+                "is_married": False
+            }
+        }
 
 
 @app.get("/")
